@@ -7,38 +7,33 @@
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
-<div class="container">
-    <h1 class="text-center my-4">Login</h1>
-<form action="/login.php" method="POST">
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="email" id="email" class="form-control" name="email"/>
-    <label class="form-label" for="email">Email address</label>
-  </div>
+  <div class="container d-flex justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4 bg-white p-4 rounded shadow">
+      <h1 class="text-center mb-4">Giriş Yap</h1>
+      <?php if(isset($_GET['error'])){
+        echo "<div class='alert alert-danger text-center py-2' role='alert'>Giriş Hatası, Lütfen Şifrenizi Ve Email Adresinizi Kontrol Edin.</div>";
+      }?>
+      <form action="/login.php" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">E-posta Adresi</label>
+          <input type="email" id="email" class="form-control" name="email" required>
+        </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="password" id="password" class="form-control" name="password"/>
-    <label class="form-label" for="email">Password</label>
-  </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Şifre</label>
+          <input type="password" id="password" class="form-control" name="password" required>
+        </div>
 
-    <div class="col">
-      <!-- Simple link -->
-      <a href="#!">Forgot password?</a>
+        <div class="text-center mb-3">
+          <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+        </div>
+
+        <div class="text-center">
+          <a href="#!">Şifrenizi mi unuttunuz?</a>
+        </div>
+      </form>
     </div>
   </div>
-
-  <!-- Submit button -->
-  <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4 align-center">Sign in</button>
-
-  <!-- Register buttons -->
-  <div class="text-center">
-    <p>Not a member? <a href="#!">Register</a></p>
-    <p>or sign up with:</p>
-  </div>
-</form>
-</div>
-
-
-
 <?php 
 session_start(options: [ 
         'cookie_path' => '/',
