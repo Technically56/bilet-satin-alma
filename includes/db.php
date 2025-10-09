@@ -9,7 +9,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO(dsn: $dsn, username: $user, password: $pass, options: $options);
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
     die("Database connection failed: " . $e->getMessage());

@@ -1,6 +1,7 @@
+<?php session_start();?>
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow fs-5">
   <div class="container-fluid">
-    <a href="#" class="navbar-brand mb-0 h1 fs-5">
+    <a href="/" class="navbar-brand mb-0 h1 fs-5">
       <img 
         class="d-inline-block align-center"
         src="static/images/logo.png"
@@ -22,8 +23,7 @@
         <li class="nav-item">
           <a href="#" class="nav-link">İletişim</a>
         </li>
-        
-<!-- Add Login Check Here-->
+        <?php if(isset($_SESSION['user_id'])){ ?>
         <li class="nav-item">
           <a href="profile.php" class="nav-link">
             <img 
@@ -34,6 +34,11 @@
             />
           </a>
         </li>
+        <?php } else { ?>
+        <li class="nav-item">
+          <a href="/login.php" class="nav-link bg-light text-primary fw-bold px-3 rounded-pill ms-2 shadow-sm">Üye-Girişi/Kayıt Ol</a>
+        </li>
+        <?php } ?>
       </ul>
     </div>
   </div>
