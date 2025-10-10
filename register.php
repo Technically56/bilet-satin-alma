@@ -47,8 +47,8 @@
 
 <?php 
     session_start();
-    require_once("includes/db.php");
-    require_once("includes/UserOperations.php");
+    require_once("includes/db/db.php");
+    require_once("includes/db/UserOperations.php");
     $userManager = new UserManager(pdo: $pdo);
     if(isset($_SESSION["user_id"])){
         echo "<script> window.location.href = '/profile.php' </script>";

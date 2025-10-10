@@ -42,8 +42,8 @@ session_start(options: [
         'cookie_httponly' => true,
         'cookie_samesite' => 'lax',
     ]);
-require_once 'includes/db.php';
-require_once 'includes/UserOperations.php';
+require_once 'includes/db/db.php';
+require_once 'includes/db/UserOperations.php';
 $userManager = new UserManager(pdo: $pdo);
 
 if(isset($_SESSION["user_id"])){
