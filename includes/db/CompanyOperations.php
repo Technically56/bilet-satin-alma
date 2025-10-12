@@ -1,7 +1,7 @@
 <?php 
 class CompanyManager{
     private PDO $pdo;
-    public function __construct(){
+    public function __construct(PDO $pdo){
             $this->pdo = $pdo;
     }
     public function generateUuid(): string {
@@ -10,7 +10,7 @@ class CompanyManager{
     $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
-    public function create(?string $id = null, string $name, string $logopath): bool {
+    public function create(string $name, string $logopath,?string $id = null): bool {
         $statement = $this->pdo->prepare("INSERT INTO Bus_Company (id, name, logopath) VALUES (:id, :name, :logopath)");
         return $statement->execute([
             ':id' => $id ?? $this->generateUuid(),
