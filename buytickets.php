@@ -28,11 +28,7 @@
                             foreach($trips as $trip){
                                 $bookedseats = $tripManager->getBookedSeats($trip['id']);
                                 $company = $companyManager->findById($trip['company_id']);
-                                
-                                
-                                
-                                
-                               
+                                displayTripBox($company['name'],$trip['logo_path'],$trip['price'],$trip['capacity'],$bookedseats);
                             }
                            
 }}}}
