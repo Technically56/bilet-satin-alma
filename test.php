@@ -23,8 +23,19 @@ $full_seats = [1, 2, 3, 5, 9, 10, 15, 18, 22, 25]; // example booked seats
             echo displayTripBox(
                 "Deneme Şirketi",
                 "static/images/companylogo.png",
+                "10:00",
                 "150",
                 36,
+                "test_trip_id" ,
+                $full_seats
+            );
+            echo displayTripBox(
+                "Deneme Şirketi2",
+                "static/images/companylogo.png",
+                "10:00",
+                "1200",
+                36,
+                "test_trip_id2",
                 $full_seats
             );
         ?>

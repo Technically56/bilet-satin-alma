@@ -23,7 +23,7 @@
         <li class="nav-item">
           <a href="#" class="nav-link">İletişim</a>
         </li>
-        <?php if(isset($_SESSION['user_id'])){ ?>
+        <?php if(isset($_SESSION['user_id']) && isset($_SESSION['user_role'])){ ?>
         <li class="nav-item">
           <a href="profile.php" class="nav-link">
             <img 
