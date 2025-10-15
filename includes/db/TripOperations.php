@@ -262,7 +262,10 @@ class TripManager
         }
         return $fullSeats;
     }
-
+    public function validCities(): array
+    {
+        return $this->validCities;
+    }
 
 }
 ?>

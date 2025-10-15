@@ -7,11 +7,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <title>BiletSatınAl</title>
+    <title>Sefer Arama</title>
 </head>
 
 <body>
-    <?php session_start();
+    <?php session_start([
+        'cookie_path' => '/',
+        'cookie_lifetime' => 3600,
+        'cookie_secure' => false,
+        'cookie_httponly' => true,
+        'cookie_samesite' => 'lax',
+    ]);
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) { ?>
@@ -27,15 +33,11 @@
         $tripManager = new TripManager($pdo);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!empty($_POST['from']) && !empty($_POST['to']) && !empty($_POST['date']) && !empty($_POST['time'])) {
-                $from = $_POST['from'];
-                $to = $_POST['to'];
-                $date = $_POST['date'];
-                $time = $_POST['time'];
-                $date = $date . ' ' . $time . ':00';
-                echo $date;
-                echo "<br>";
-
+            if (!empty($_POST['from']) && !empty($_POST['to']) && !empty($_POST['date'])) {
+                $from = filter_input(INPUT_POST, 'from', FILTER_SANITIZE_SPECIAL_CHARS);
+                $to = filter_input(INPUT_POST, 'to', FILTER_SANITIZE_SPECIAL_CHARS);
+                $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
+                $date = $date . ' ' . '00:00:00';
                 $datetime = DateTime::createFromFormat('Y-m-d H:i:s', $date);
                 echo $datetime->format('Y-m-d H:i:s');
                 if ($tripManager->isValidCity($from) && $tripManager->isValidCity($to)) {
@@ -76,12 +78,12 @@
                 <div class="card shadow">
                     <div class="card-header bg-primary text-white">
                         <h3 class="mb-0">
-                            <i class="bi bi-search"></i> Otobüs Bileti Ara
+                            <i class="bi bi-search"></i> Otobüs Seferi Ara
                         </h3>
                     </div>
                     <div class="card-body p-4">
                         <form action="findtrip.php" method="POST" id="searchForm">
-                            <div class="row g-3">
+                            <div class="row g-3 d-flex justify-content-center">
                                 <!-- From City -->
                                 <div class="col-md-6 col-lg-3">
                                     <label for="fromCity" class="form-label fw-bold">
@@ -90,7 +92,7 @@
                                     <select class="form-select form-select-lg" id="from" name="from" required>
                                         <option value="" selected disabled>Şehir Seçin</option>
                                         <?php
-                                        $cities = ["Istanbul", "Ankara", "Izmir", "Antalya", "Bursa", "Adana", "Gaziantep", "Konya", "Samsun"];
+                                        $cities = $tripManager->validCities();
                                         foreach ($cities as $city) {
                                             echo "<option value=\"$city\">$city</option>";
                                         }
@@ -119,14 +121,6 @@
                                         <i class="bi bi-calendar-event text-info"></i> Tarih
                                     </label>
                                     <input type="date" class="form-control form-control-lg" id="date" name="date" required>
-                                </div>
-
-                                <!-- Time -->
-                                <div class="col-md-6 col-lg-3">
-                                    <label for="travelTime" class="form-label fw-bold">
-                                        <i class="bi bi-clock text-warning"></i> Saat
-                                    </label>
-                                    <input type="time" class="form-control form-control-lg" id="time" name="time">
                                 </div>
                             </div>
 
