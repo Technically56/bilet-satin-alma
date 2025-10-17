@@ -43,12 +43,32 @@ class PaymentManager
         }
         return ($sum % 10 == 0);
     }
-    public function buyTicket(string $user_id, string $trip_id, array $seats): string
+    public function buyTicket(string $trip_id, array $seats , ?string $coupon_id): string
     {
-        $trip = $this->tripManager->getTripById($trip_id);
-        $trip_price = $trip['price'];
-        $total_price = $trip_price * count($seats);
+        $user_id = $_SESSION['user_id'];
+        if(!$user_id){
+            return 'login error';
+        }
         $user = $this->userManager->findById($user_id);
+        if(empty($user)){
+            return 'user doesnt exist';
+        }
+        $trip = $this->tripManager->getTripById($trip_id);
+        $trip_price = (int)$trip['price'];
+
+        if(!empty($coupon_id)){
+            $userCoupon = $this->getUserCoupons($coupon_id);
+            if(!empty($userCoupon)){
+                $coupon = $this->getCouponById($userCoupon['id']);
+                if($coupon['usage_limit'] > 0){
+                    $total_price = ($trip_price * count($seats)) - (int)$coupon['discount'];
+                }
+            }
+        }else{
+            $total_price = $trip_price * count($seats);
+        }
+        
+        
         if (!$user) {
             return "Kullanıcı bulunamadı.";
         }
@@ -64,9 +84,27 @@ class PaymentManager
         $this->userManager->updateBalance($user_id, $user['balance'] - $total_price);
         foreach ($seats as $seat) {
             $this->ticketManager->createTicket($trip_id, $user_id, $seat, $trip['company_id']);
+            #add payment check here
         }
+
         return "success";
     }
-
+    public function getUserCoupons(string $user_id): array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM User_Coupons WHERE user_id = :user_id");
+        $statement->execute(['user_id' => $user_id]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getCouponById(string $coupon_id): ?array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM Coupons WHERE id = :coupon_id");
+        $statement->execute(['coupon_id' => $coupon_id]);
+        $coupon = $statement->fetch(PDO::FETCH_ASSOC);
+        return $coupon ?: null;
+    }
+    public function deleteUserCoupon(string $coupon_id): bool{
+        $statement = $pdo->prepare("DELETE FROM User_Coupons WHERE id = :coupon_id");
+        return $pdo->execute(['coupon_id'=> $coupon_id]);
+    }
 }
 ?>
