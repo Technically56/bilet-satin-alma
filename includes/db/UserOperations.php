@@ -84,6 +84,7 @@ class UserManager
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_role'] = $user['role'];
             $_SESSION['user_fullname'] = $user['full_name'];
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             return true;
         }
         return false;

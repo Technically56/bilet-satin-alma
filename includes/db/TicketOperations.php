@@ -43,6 +43,7 @@ class TicketManager
         string $user_id,
         int $seat_number,
         string $company_id,
+        ?int $discount = null,
         ?string $id = null
     ): bool {
         try {
@@ -67,7 +68,7 @@ class TicketManager
                 ':user_id' => $user_id,
                 ':company_id' => $company_id,
                 ':status' => 'active',
-                ':total_price' => $price
+                ':total_price' => ($price - $discount ?? 0)
             ]);
 
             $seatStmt = $this->pdo->prepare("

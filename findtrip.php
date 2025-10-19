@@ -63,13 +63,13 @@
                         }
 
                     } else {
-                        echo "<div class='alert alert-warning text-center' role='alert'>Datetime</div>";
+                        echo "<div class='alert alert-warning text-center' role='alert'>Girdiğiniz Tarih Formatı Hatalı, Lütfen Tekrar Deneyin.</div>";
                     }
                 } else {
-                    echo "<div class='alert alert-warning text-center' role='alert'>Datetime</div>";
+                    echo "<div class='alert alert-warning text-center' role='alert'>Yanlış Bir Şehir Girdiniz, Lütfen Tekrar Deneyin</div>";
                 }
             } else {
-                echo "<div class='alert alert-warning text-center' role='alert'>Validcity</div>";
+                echo "<div class='alert alert-warning text-center' role='alert'>Lütfen Tüm Alanları Seçiniz!</div>";
             }
         }
         if ($_SERVER['REQUEST_METHOD'] === 'GET'): ?>

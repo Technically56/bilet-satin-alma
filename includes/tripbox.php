@@ -29,8 +29,8 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
 
             <div class="collapse trip-collapse" id="<?php echo $uniqueId; ?>">
                 <div class="card-body">
-                    <form action="process_booking.php" method="POST">
-                        <input type="hidden" name="display_id" value="<?php echo htmlspecialchars($uniqueId); ?>">
+                    <form action="checkout.php" method="GET">
+                        <input type="hidden" name="trip_id" value="<?php echo htmlspecialchars($uniqueId); ?>">
 
                         <div class="text-center p-3 bg-light rounded mb-4">
                             <h5>Şoför</h5>
@@ -111,7 +111,6 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
             const collapseElement = document.getElementById('<?php echo $uniqueId; ?>');
 
             collapseElement.addEventListener('show.bs.collapse', function () {
-                // Find all other trip collapses and close them
                 document.querySelectorAll('.trip-collapse').forEach(function (element) {
                     if (element.id !== '<?php echo $uniqueId; ?>' && element.classList.contains('show')) {
                         const bsCollapse = bootstrap.Collapse.getInstance(element);
