@@ -39,6 +39,7 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
                         <div class="mb-4">
                             <?php
                             $totalrows = $capacity / 3;
+                            echo print_r($fullseats);
                             for ($i = 0; $i < $totalrows; $i++) {
                                 ?>
                                 <div class="d-flex justify-content-center align-items-center mb-2">
@@ -111,6 +112,7 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
             const collapseElement = document.getElementById('<?php echo $uniqueId; ?>');
 
             collapseElement.addEventListener('show.bs.collapse', function () {
+
                 document.querySelectorAll('.trip-collapse').forEach(function (element) {
                     if (element.id !== '<?php echo $uniqueId; ?>' && element.classList.contains('show')) {
                         const bsCollapse = bootstrap.Collapse.getInstance(element);

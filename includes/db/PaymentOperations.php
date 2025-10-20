@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 class PaymentManager
 {
     private PDO $pdo;
@@ -47,6 +49,7 @@ class PaymentManager
     public function buyTicket(string $trip_id, array $seats, ?string $coupon_id): string
     {
         $user_id = $_SESSION['user_id'];
+        $discount = null;
         if (!$user_id) {
             return 'login error';
         }
@@ -61,13 +64,16 @@ class PaymentManager
             $userCoupon = $this->getUserCoupon($coupon_id);
             if (!empty($userCoupon)) {
                 $coupon = $this->getCouponById($userCoupon['coupon_id']);
-                if ($coupon['company_id'] != 'all') {
+                if ($coupon['company_id'] != '') {
                     if ($coupon['company_id'] !== $trip['company_id']) {
                         return "Bu kupon bu şirket için geçerli değil.";
                     }
                     if ($coupon['usage_limit'] > 0) {
-                        $total_price = ($trip_price * count($seats)) - (int) $coupon['discount'];
+                        $discount = (int) ($trip_price * (float) $coupon['discount']);
+                        $total_price = ($trip_price * count($seats)) - $discount;
                     }
+                } elseif ($coupon['company_id'] === '') {
+                    $total_price = ($trip_price * count($seats)) - ($trip_price * (float) $coupon['discount']);
                 }
             }
         } else {
@@ -87,20 +93,21 @@ class PaymentManager
         if (array_intersect($seats, $this->tripManager->getBookedSeats($trip_id))) {
             return "Seçilen koltuklardan bazıları zaten satılmış. Lütfen başka koltuklar seçin.";
         }
-        $discount = $coupon['discount'] ?? null;
+
         foreach ($seats as $seat) {
             if ($discount !== null) {
-                $result = $this->ticketManager->createTicket($trip_id, $user_id, $seat, $trip['company_id'], $discount);
+                $result = $this->ticketManager->createTicket($trip_id, $user_id, (int) $seat, $discount);
+                $this->deleteUserCoupon($userCoupon['id']);
+                $this->updateCouponUsage($coupon['id']);
                 $discount = null;
             } else {
-                $result = $this->ticketManager->createTicket($trip_id, $user_id, $seat, $trip['company_id']);
+                $result = $this->ticketManager->createTicket($trip_id, $user_id, (int) $seat, );
             }
             if (!$result) {
-                return $result;
+                return "noresult";
             }
         }
-        $this->deleteUserCoupon($userCoupon['id'] ?? '');
-        $this->updateCouponUsage($coupon['id'] ?? '');
+
         $this->userManager->updateBalance($user_id, -$total_price);
         return "success";
     }

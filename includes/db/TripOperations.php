@@ -257,8 +257,8 @@ class TripManager
         foreach ($tickets as $ticket) {
             $seatStatement = $this->pdo->prepare("SELECT seat_number FROM Booked_Seats WHERE ticket_id = :ticket_id");
             $seatStatement->execute([':ticket_id' => $ticket['id']]);
-            $seats = $seatStatement->fetchAll(PDO::FETCH_ASSOC);
-            $fullSeats[$ticket['seat_number']] = $seats;
+            $seat = $seatStatement->fetch(PDO::FETCH_ASSOC);
+            $fullSeats[] = $seat['seat_number'];
         }
         return $fullSeats;
     }

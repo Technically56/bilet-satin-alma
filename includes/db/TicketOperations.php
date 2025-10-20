@@ -42,8 +42,7 @@ class TicketManager
         string $trip_id,
         string $user_id,
         int $seat_number,
-        string $company_id,
-        ?int $discount = null,
+        ?float $discount = null,
         ?string $id = null
     ): bool {
         try {
@@ -53,22 +52,21 @@ class TicketManager
             $statement = $this->pdo->prepare("SELECT price FROM Trips WHERE id = :trip_id");
             $statement->execute([':trip_id' => $trip_id]);
             $trip = $statement->fetch(PDO::FETCH_ASSOC);
-            $price = $trip ? $trip['price'] : null;
+            $price = (int) $trip ? $trip['price'] : null;
 
             $uuid = $this->generateUuid();
-
+            $total_price = $discount !== null ? ($price - $discount) : $price;
 
             $ticketStmt = $this->pdo->prepare("
-                INSERT INTO Tickets (id, trip_id, user_id, company_id, status, total_price)
-                VALUES (:id, :trip_id, :user_id, :company_id, :status, :total_price)
+                INSERT INTO Tickets (id, trip_id, user_id, status, total_price)
+                VALUES (:id, :trip_id, :user_id, :status, :total_price)
             ");
             $result = $ticketStmt->execute([
                 ':id' => $uuid,
                 ':trip_id' => $trip_id,
                 ':user_id' => $user_id,
-                ':company_id' => $company_id,
                 ':status' => 'active',
-                ':total_price' => ($price - $discount ?? 0)
+                ':total_price' => (int) $total_price
             ]);
 
             $seatStmt = $this->pdo->prepare("
@@ -86,6 +84,7 @@ class TicketManager
                 return true;
             } else {
                 $this->pdo->rollBack();
+                $_SESSION['debug'] = "result: " . ($result ? 'true' : 'false') . ", seatResult: " . ($seatResult ? 'true' : 'false');
                 return false;
             }
         } catch (Exception $e) {
@@ -136,19 +135,17 @@ class TicketManager
     public function updateTicket(
         string $ticket_id,
         string $user_id,
-        string $seat_number,
         string $status
     ): bool {
         $statement = $this->pdo->prepare("
             UPDATE Tickets
-            SET user_id = :user_id, status = :status, seat_number = :seat_number
+            SET user_id = :user_id, status = :status
             WHERE id = :id
         ");
         return $statement->execute([
             ':id' => $ticket_id,
             ':user_id' => $user_id,
             ':status' => $status,
-            ':seat_number' => $seat_number
         ]);
     }
 }

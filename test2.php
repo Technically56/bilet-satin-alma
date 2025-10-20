@@ -13,6 +13,8 @@
     ini_set('display_errors', 1);
     include("includes/db/TripOperations.php");
     include("includes/db/db.php");
+    include("includes/db/UserOperations.php");
+    $userManager = new UserManager($pdo);
     $tripManager = new TripManager($pdo);
     session_start();
     echo "validcity" . $tripManager->isValidCity("asd") . "<br>";
@@ -22,8 +24,12 @@
     print_r($trips);
     echo "</pre>";
     echo $_SESSION["user_id"];
+    echo "<br>";
     echo $_SESSION["user_role"];
+    echo "<br>";
     echo $_SESSION["user_fullname"];
+    echo "<br>";
+    echo $userManager->getBalance($_SESSION["user_id"]);
     ?>
 </body>
 

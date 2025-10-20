@@ -27,19 +27,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trip_id = getFromAtlas($_POST['trip_id']);
         $seats = $_POST['seats'];
         $csrf = $_POST['csrf_token'];
-        $coupon_id = getFromAtlas($_POST['coupon_id']);
+        if ($_POST['coupon_id'] === "default") {
+            $coupon_id = null;
+        } else {
+            $coupon_id = getFromAtlas($_POST['coupon_id']);
+        }
         if (!hash_equals($_SESSION['csrf_token'], $csrf)) {
             die("CSRF tokeni geçersiz.");
         }
         if (empty($seats)) {
             die("Lütfen en az bir koltuk seçin.");
         }
+        echo "hello";
         $result = $paymentManager->buyTicket($trip_id, $seats, $coupon_id);
+        echo "here";
+        echo $_SESSION['debug'];
         if ($result === "success") {
-
+            $_SESSION['paymentredirect'] = true;
+            echo "<script>window.location.href = '/paymentconfirm.php';</script>";
         } else {
+            $_SESSION['paymentredirect'] = true;
+            $_SESSION['flash_message'] = $result;
+            echo "<script>window.location.href = '/paymentfailed.php';</script>";
 
-            die($result);
         }
     }
 }
@@ -60,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $trip = $tripManager->getTripById($trip_id);
             $company = $companyManager->findById($trip['company_id']);
             $booked_Seats = $tripManager->getBookedSeats($trip_id);
+            echo print_r($booked_Seats);
             if (array_intersect($seats, $booked_Seats)) {
                 die('Seçilen koltuklardan bazıları zaten rezerve edilmiş. Lütfen başka koltuklar seçin.');
             }
@@ -148,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Right Column - Order Summary -->
                         <div class="col-lg-4">
                             <div class="card sticky-top" style="top: 20px;">
                                 <div class="card-header bg-primary text-white py-3">
@@ -161,44 +171,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         echo htmlspecialchars($totalTicketPrice); ?>
                                             TL</span>
                                     </div>
-                                    <div id="couponSection">
-
+                                    <div id="couponSection" hx-post="/api/applycoupon.php" hx-trigger="load" hx-swap="innerHTML"
+                                        hx-include="#trip_id,#seatcount,#couponSelect">
                                     </div>
-                                    <input type="hidden" id="seatcount" value="<?php htmlspecialchars(count($seats)); ?>">
-                                    <form>
-                                        <input type="hidden" name="trip_id"
+                                    <input name="seatcount" type="hidden" id="seatcount"
+                                        value="<?php echo htmlspecialchars(count($seats)); ?>">
+                                    <form action="/checkout.php" method="POST">
+                                        <input type="hidden" name="trip_id" id="trip_id"
                                             value="<?php echo htmlspecialchars($_GET['trip_id']); ?>">
-                                        <input type="hidden" name="csrf"
+                                        <input type="hidden" name="csrf_token" id="csrf_token"
                                             value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                                         <?php foreach ($seats as $seat): ?>
                                             <input type="hidden" name="seats[]" value="<?= htmlspecialchars($seat) ?>">
                                         <?php endforeach; ?>
-                                        <div class="mb-3">
+                                        <div id="postdiv" class="mb-3" hx-post="/api/applycoupon.php" hx-target="#couponSection"
+                                            hx-swap="innerHTML" hx-trigger="change from:#couponSelect"
+                                            hx-include="#trip_id,#seatcount, #couponSelect">
                                             <label for="couponSelect" class="form-label fw-bold">Kupon Seç</label>
-                                            <select hx-post="/api/applycoupon.php" hx-target="#couponSection" hx-swap="innerHTML"
-                                                hx-trigger="change" hx-include="#trip_id" class="form-select form-select-lg"
-                                                id="couponSelect" name="coupon_id">
-                                                <option value="">Kupon Kullanmadan Devam Et</option>
+                                            <select class="form-select form-select-lg" id="couponSelect" name="coupon_id">
+                                                <option value="default" selected>Kupon Kullanmadan Devam Et</option>
                                                 <?php foreach ($userCoupons as $userCoupon):
-                                                    $coupon = $paymentManager->getCouponById($userCoupon['id']);
+
+                                                    $coupon = $paymentManager->getCouponById($userCoupon['coupon_id']);
+                                                    echo "coupon:" . print_r($coupon);
+
                                                     ?>
-                                                    <option value="<?php htmlspecialchars(sendToAtlas($userCoupon['id'])); ?>" selected>
+                                                    <option value="<?php echo htmlspecialchars(sendToAtlas($userCoupon['id'])); ?>">
                                                         <?php echo htmlspecialchars($coupon['code']); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
-                                            <small class="text-muted d-block mt-2">Choose from available coupons or enter a custom
-                                                code
-                                                below</small>
+                                            <small class="text-muted d-block mt-2">Kupon kodu seçiniz</small>
                                         </div>
                                         <div class="d-grid gap-2">
-                                            <button class="btn btn-primary btn-lg py-3 fw-bold" type="button">
-                                                Complete Booking
-                                            </button>
+                                            <input value="Satın Al" type="submit" class="btn btn-primary btn-lg py-3 fw-bold"
+                                                type="button">
+                                            </input>
                                     </form>
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        Back to Seat Selection
-                                    </button>
+                                    <a href="/findtrip.php" class="btn btn-outline-secondary" type="button">
+                                        Koltuk Seçimine Geri Dön
+                                    </a>
                                 </div>
                             </div>
                         </div>

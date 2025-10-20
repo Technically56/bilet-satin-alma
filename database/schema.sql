@@ -57,7 +57,7 @@ CREATE TABLE Coupons(
     discount REAL NOT NULL,
     usage_limit INTEGER NOT NULL,
     expire_date DATETIME NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     company_id UUID NOT NULL,
     FOREIGN KEY (company_id) REFERENCES Bus_Company(id)
 );

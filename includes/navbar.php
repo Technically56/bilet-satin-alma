@@ -18,13 +18,13 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item active">
           <!-- Add Dynamic Company Listing Here-->
-          <a href="#" class="nav-link">Firmalar</a>
+          <a href="/companies.php" class="nav-link">Firmalar</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Bilet Al</a>
+          <a href="/findtrip.php" class="nav-link">Bilet Al</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">İletişim</a>
+          <a href="contact.php" class="nav-link">İletişim</a>
         </li>
         <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) { ?>
           <li class="nav-item">
