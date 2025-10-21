@@ -5,7 +5,7 @@
   'cookie_httponly' => true,
   'cookie_samesite' => 'lax',
 ]); ?>
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow fs-5">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top shadow fs-5">
   <div class="container-fluid">
     <a href="/" class="navbar-brand mb-0 h1 fs-5">
       <img class="d-inline-block align-center" src="static/images/logo.png" width="50" height="50" alt="Logo" />
@@ -27,10 +27,22 @@
           <a href="contact.php" class="nav-link">İletişim</a>
         </li>
         <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) { ?>
-          <li class="nav-item">
-            <a href="profile.php" class="nav-link">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               <img src="static/images/profilelogo.svg" alt="Profile" width="30" height="30" class="rounded-circle" />
             </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <li><a class="dropdown-item" href="profile.php">Profilim</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="addbalance.php">Bakiye Yükle</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="logout.php">Çıkış Yap</a></li>
+            </ul>
           </li>
         <?php } else { ?>
           <li class="nav-item">

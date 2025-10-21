@@ -85,6 +85,12 @@
       echo "<script> window.location.href = '/register.php' </script>";
       exit;
     }
+    if (strlen($password) < 8) {
+      $_SESSION["flash_message"] = "Lütfen Şifrenizi 8 karakterden uzun olacak şekilde giriniz";
+      echo "<script> window.location.href = '/register.php' </script>";
+      exit;
+    }
+
     if ($userManager->create($fullname, $email, $password)) {
       $_SESSION['flash_message'] = "Kayıt Başarılı! Giriş Yapabilirsiniz.";
       $_SESSION["alert_type"] = "success";

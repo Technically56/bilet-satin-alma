@@ -16,7 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $userManager->findById($_SESSION["user_id"]);
         if ($user && $ticket_id) {
             $ticket = $ticketManager->getTicketById($ticket_id);
-            if ($ticket['user_id'] === $user['id']) {
+            $departureTime = DateTime::createFromFormat("Y-m-d H:i:s", $trip['departure_time']);
+            $now = new DateTime();
+            $timeDiff = ($departureTime->getTimestamp() - $now->getTimestamp());
+            if ($ticket['user_id'] === $user['id'] && $timeDiff > 3600) {
                 $pdo->beginTransaction();
                 $result = $ticketManager->updateTicket($ticket_id, $user['id'], 'canceled');
                 $seatresult = $ticketManager->deleteSeatFromTicket($ticket_id);
@@ -27,7 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     echo "<script>setTimeout(() => location.href = '/profile.php', 1000)</script>";
                 } else {
                     $pdo->rollBack();
-                    echo "<div class='alert alert-danger text-center py-2' role='alert'>$message</div>";
+                    echo "<div class='alert alert-danger text-center py-2' role='alert'>Bilet İptali Sorunu</div>";
+                    echo "<script>setTimeout(() => location.href = '/profile.php', 1000)</script>";
                 }
             }
         }

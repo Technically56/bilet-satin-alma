@@ -8,10 +8,13 @@ require_once('includes/db/UserOperations.php');
 require_once('includes/db/TicketOperations.php');
 require_once('includes/db/db.php');
 require_once('includes/idatlas/idatlas.php');
+require_once('includes/db/PaymentOperations.php');
+require_once('includes/db/TripOperations.php');
 
 $userManager = new UserManager($pdo);
 $ticketManager = new TicketManager($pdo);
-
+$tripManager = new TripManager($pdo);
+$paymentManager = new PaymentManager($pdo, $userManager, $ticketManager, $tripManager);
 if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
     if ($_SERVER['REQUEST_METHOD'] === 'GET'):
         $user = $userManager->findById($_SESSION['user_id']);
@@ -23,6 +26,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
         $canceledTickets = $ticketManager->getUserTickets($user['id'], 'canceled');
         $expiredTickets = $ticketManager->getUserTickets($user['id'], 'expired');
         $allTickets = $ticketManager->getUserTickets($user['id'], '');
+        $coupons = $paymentManager->getUserCoupons($user['id']);
         ?>
 
         <head>
@@ -74,7 +78,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card mb-4">
                             <div class="card-header bg-primary text-white py-3">
                                 <h4 class="mb-0">Kullanıcı Bilgilerini Güncelle</h4>
                             </div>
@@ -99,23 +103,71 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                                     <div class="mb-3">
                                         <label for="currentPassword" class="form-label fw-bold">Mevcut Şifre</label>
                                         <input type="password" class="form-control" id="currentPassword" name="currentPassword"
-                                            placeholder="Enter current password">
+                                            placeholder="Mevcut Şifrenizi Giriniz">
                                     </div>
                                     <div class="mb-3">
                                         <label for="newPassword" class="form-label fw-bold">Yeni Şifre</label>
                                         <input type="password" class="form-control" id="newPassword" name="newPassword"
-                                            placeholder="Enter new password">
+                                            placeholder="Yeni Şifrenizi Giriniz">
                                     </div>
                                     <div class="mb-3">
                                         <label for="confirmPassword" class="form-label fw-bold">Yeni Şifre Tekrar</label>
                                         <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                            placeholder="Confirm new password">
+                                            placeholder="Yeni Şifrenizi Tekrar Giriniz">
                                     </div>
                                     <div class="d-grid">
                                         <button type="button" id="applyButton" class="btn btn-primary">Değişiklikleri
                                             Kaydet</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div
+                                class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Kuponlarım</h4>
+                                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#addCouponModal">
+                                    Kupon Ekle
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <?php if (!empty($coupons)): ?>
+                                    <?php foreach ($coupons as $userCoupon):
+                                        $coupon = $paymentManager->getCouponById($userCoupon['coupon_id']);
+                                        if (!$coupon) {
+                                            continue;
+                                        } ?>
+
+                                        <div class="card mb-3 border-success">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="mb-1 text-success fw-bold">
+                                                            <?php echo htmlspecialchars($coupon['code']); ?>
+                                                        </h6>
+                                                    </div>
+                                                    <span class="badge bg-success">Aktif</span>
+                                                </div>
+                                                <p class="text-muted small mb-0">Son Kulanım Tarihi:
+                                                    <?php $couponTime = new DateTime($coupon['expire_date']);
+                                                    echo htmlspecialchars($couponTime->format("d-m-Y H:i")); ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="text-center py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
+                                            class="text-muted mb-3" viewBox="0 0 16 16">
+                                            <path
+                                                d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z" />
+                                        </svg>
+                                        <p class="text-muted mb-0">Hiç Kupon Yok!</p>
+                                        <small class="text-muted">Kupon Eklemek İçin Kupon Ekleme Butonununu Kullanın.</small>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -172,13 +224,14 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                                                             Bileti İptal Et
                                                         </button>
                                                     <?php else: ?>
-                                                        <small class="text-muted">İptal süresi doldu (kalkışa 1 saatten az kaldı)</small>
+                                                        <small class="text-muted">İptal süresi doldu (kalkışa 1 saatten az
+                                                            kaldı)</small>
                                                     <?php endif; ?>
+                                                    <?php ?>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Cancel Modal -->
                                         <div class="modal fade" id="cancelModal<?php echo $index; ?>" tabindex="-1">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -238,6 +291,38 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="addCouponModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">Kupon Ekle</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="couponResponseDiv"></div>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="couponCode" class="form-label fw-bold">Kupon Kodu</label>
+                                    <input type="text" class="form-control" id="couponCode" name="couponCode"
+                                        placeholder="Kupon kodunu giriniz" required>
+                                </div>
+                                <input type="hidden" id="csrf_token_coupon" name="csrf_token"
+                                    value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                            <button type="button" class="btn btn-primary" hx-post="/api/addcoupon.php"
+                                hx-include="#couponCode, #csrf_token_coupon" hx-target="#couponResponseDiv" hx-trigger="click"
+                                hx-swap="innerHTML">
+                                Kupon Ekle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <?php include("includes/footer.php") ?>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         </body>
@@ -246,5 +331,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
 
         <?php
     endif;
+else:
+    echo "<script>setTimeout(() => location.href = '/needlogin.php', 50)</script>";
 endif;
 ?>

@@ -70,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $trip = $tripManager->getTripById($trip_id);
             $company = $companyManager->findById($trip['company_id']);
             $booked_Seats = $tripManager->getBookedSeats($trip_id);
-            echo print_r($booked_Seats);
             if (array_intersect($seats, $booked_Seats)) {
                 die('Seçilen koltuklardan bazıları zaten rezerve edilmiş. Lütfen başka koltuklar seçin.');
             }
@@ -228,4 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
         endif;
     endif;
+else:
+    echo "<script>setTimeout(() => location.href = '/needlogin.php', 1000)</script>";
 endif; ?>

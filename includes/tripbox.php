@@ -16,7 +16,7 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
                             style="width: 80px; height: 80px;">
                         <div class="text-start">
                             <div class="fw-bold fs-4">
-                                <?php echo htmlspecialchars($company_name) . htmlspecialchars($departure_time); ?>
+                                <?php echo htmlspecialchars($company_name) . " " . htmlspecialchars($departure_time); ?>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,6 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
                         <div class="mb-4">
                             <?php
                             $totalrows = $capacity / 3;
-                            echo print_r($fullseats);
                             for ($i = 0; $i < $totalrows; $i++) {
                                 ?>
                                 <div class="d-flex justify-content-center align-items-center mb-2">

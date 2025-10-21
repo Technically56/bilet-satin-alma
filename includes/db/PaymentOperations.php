@@ -15,15 +15,9 @@ class PaymentManager
         $this->ticketManager = $ticketManager;
         $this->tripManager = $tripManager;
     }
-    public function addFunds(string $user_id, int $balance, string $card_number, string $expiry, string $cvv): bool
+    public function addFunds(string $user_id, int $balance, string $card_number): bool
     {
         if (!$this->luhnvalidate($card_number)) {
-            return false;
-        }
-        if (strtotime($expiry) < time()) {
-            return false;
-        }
-        if (!preg_match('/^\d{3,4}$/', $cvv)) {
             return false;
         }
         return $this->userManager->updateBalance($user_id, $balance);
@@ -140,6 +134,18 @@ class PaymentManager
     {
         $statement = $this->pdo->prepare("UPDATE Coupons SET usage_limit = usage_limit - 1 WHERE id = :coupon_id AND usage_limit > 0");
         return $statement->execute(['coupon_id' => $coupon_id]);
+    }
+    public function getCouponByCode(string $coupon_code): ?array
+    {
+        $statement = $this->pdo->prepare('SELECT * FROM Coupons WHERE code = :code');
+        $statement->execute([':code' => $coupon_code]);
+        return $statement->fetch(PDO::FETCH_ASSOC) ?? null;
+    }
+    public function addUserCoupon(string $user_id, string $coupon_code): bool
+    {
+        $statement = $this->pdo->prepare('INSERT INTO User_Coupons(id,user_id,coupon_id) VALUES(:id, :user_id, :coupon_id)');
+        return $statement->execute(['id' => $this->userManager->generateUuid(), 'user_id' => $user_id, 'coupon_id' => $coupon_code]);
+
     }
 }
 ?>
