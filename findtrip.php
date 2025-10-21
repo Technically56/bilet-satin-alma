@@ -134,7 +134,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Hidden field for ISO 8601 datetime -->
                             <input type="hidden" id="isoDateTime" name="datetime">
                         </form>

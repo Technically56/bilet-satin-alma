@@ -193,12 +193,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <?php foreach ($userCoupons as $userCoupon):
 
                                                     $coupon = $paymentManager->getCouponById($userCoupon['coupon_id']);
-                                                    echo "coupon:" . print_r($coupon);
-
-                                                    ?>
-                                                    <option value="<?php echo htmlspecialchars(sendToAtlas($userCoupon['id'])); ?>">
-                                                        <?php echo htmlspecialchars($coupon['code']); ?>
-                                                    </option>
+                                                    if ($coupon['company_id'] === $trip['company_id']):
+                                                        ?>
+                                                        <option value="<?php echo htmlspecialchars(sendToAtlas($userCoupon['id'])); ?>">
+                                                            <?php echo htmlspecialchars($coupon['code']); ?>
+                                                        </option>
+                                                    <?php endif; ?>
                                                 <?php endforeach; ?>
                                             </select>
                                             <small class="text-muted d-block mt-2">Kupon kodu seçiniz</small>

@@ -16,14 +16,13 @@ class TicketManager
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    public function getTicketById(string $ticket_id, string $company_id): ?array
+    public function getTicketById(string $ticket_id): ?array
     {
         $statement = $this->pdo->prepare(
-            "SELECT * FROM Tickets WHERE id = :id AND company_id = :company_id"
+            "SELECT * FROM Tickets WHERE id = :id"
         );
         $statement->execute([
             ':id' => $ticket_id,
-            ':company_id' => $company_id,
         ]);
         $ticket = $statement->fetch(PDO::FETCH_ASSOC);
         return $ticket ?: null;
@@ -147,6 +146,50 @@ class TicketManager
             ':user_id' => $user_id,
             ':status' => $status,
         ]);
+    }
+    public function getUserTickets(string $user_id, string $status): ?array
+    {
+        if (array_search($status, ['active', 'expired', 'canceled', '']) === false) {
+            return null;
+        }
+        if ($status === '') {
+            $statement = $this->pdo->prepare("SELECT * FROM Tickets WHERE user_id = :user_id");
+            $statement->execute([":user_id" => $user_id]);
+        } else {
+            $statement = $this->pdo->prepare("SELECT * FROM Tickets WHERE user_id = :user_id AND status = :status");
+            $statement->execute([":user_id" => $user_id, ":status" => $status]);
+        }
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return $result;
+        }
+        return null;
+    }
+    public function getSeatFromTicket(string $ticket_id): ?array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM Booked_Seats WHERE ticket_id = :ticket_id");
+        $statement->execute(["ticket_id" => $ticket_id]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result ?? null;
+    }
+    public function getTripFromTicket(string $ticket_id): ?array
+    {
+        $ticketStatement = $this->pdo->prepare("SELECT trip_id FROM Tickets WHERE id = :ticket_id");
+        $ticketStatement->execute(["ticket_id" => $ticket_id]);
+        $ticketResult = $ticketStatement->fetch(PDO::FETCH_ASSOC);
+
+
+        $statement = $this->pdo->prepare("SELECT * FROM Trips WHERE id = :trip_id");
+        $statement->execute(["trip_id" => $ticketResult["trip_id"]]);
+        $trip = $statement->fetch(PDO::FETCH_ASSOC);
+        return $trip ?? null;
+    }
+    public function deleteSeatFromTicket(string $ticket_id): bool
+    {
+        $seat = $this->getSeatFromTicket($ticket_id);
+        $statement = $this->pdo->prepare("DELETE FROM Booked_Seats WHERE id = :seat_id");
+        return $statement->execute(["seat_id" => $seat['id']]);
+
     }
 }
 ?>

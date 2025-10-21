@@ -41,11 +41,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-grid gap-2">
-                                <a href="/profile/tickets.php" class="btn btn-primary btn-lg py-3">
+                                <a href="/profile.php" class="btn btn-primary btn-lg py-3">
                                     Biletlerimi Görüntüle
                                 </a>
                                 <a href="/" class="btn btn-outline-secondary">
-                                    Back to Home
+                                    Ana Sayfaya Geri Dön
                                 </a>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
 
                     <!-- Information Notice -->
                     <div class="alert alert-info mt-4" role="alert">
-                        <h6 class="alert-heading">Important Information</h6>
+                        <h6 class="alert-heading">Önemli!</h6>
                         <ul class="mb-0">
                             <li>Lütfen sefer saatinizden 15dk önce biniş durağınızda olunuz.</li>
                             <li>Soru ve sorunlarınız için iletişim sayfamızı ziyaret edin.</li>
