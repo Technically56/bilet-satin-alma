@@ -10,7 +10,7 @@
 
 <body>
   <?php include 'includes/navbar.php'; ?>
-  <div class="container d-flex justify-content-center">
+  <div class="container d-flex justify-content-center mt-5 pt-5">
     <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4 bg-white p-4 rounded shadow">
       <h1 class="text-center mb-4">Kayıt Ol</h1>
       <?php include 'includes/flashbox.php'; ?>
@@ -91,7 +91,7 @@
       exit;
     }
 
-    if ($userManager->create($fullname, $email, $password)) {
+    if ($userManager->create($fullname, $email, $password, 'user')) {
       $_SESSION['flash_message'] = "Kayıt Başarılı! Giriş Yapabilirsiniz.";
       $_SESSION["alert_type"] = "success";
       echo "<script> window.location.href = '/register.php' </script>";

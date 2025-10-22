@@ -192,6 +192,10 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                                         $departureTime = DateTime::createFromFormat("Y-m-d H:i:s", $trip['departure_time']);
                                         $now = new DateTime();
                                         $timeDiff = ($departureTime->getTimestamp() - $now->getTimestamp());
+                                        if ($timeDiff < 0) {
+                                            $ticketManager->updateTicket($ticket['id'], $_SESSION['user_id'], 'expired');
+                                            continue;
+                                        }
                                         ?>
                                         <div class="card mb-3">
                                             <div class="card-body">

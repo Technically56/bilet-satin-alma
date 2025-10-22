@@ -49,17 +49,18 @@ class UserManager
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create(string $full_name, string $email, string $password, ?string $id = null): bool
+    public function create(string $full_name, string $email, string $password, string $role, ?string $id = null): bool
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->pdo->prepare(
-            'INSERT INTO User (id,full_name, email, password, role) VALUES (:id ,:full_name, :email, :password, "user")'
+            'INSERT INTO User (id,full_name, email, password, role) VALUES (:id ,:full_name, :email, :password, :role)'
         );
         return $stmt->execute([
             ':id' => $id ?? $this->generateUuid(),
             ':full_name' => $full_name,
             ':email' => $email,
-            ':password' => $hashedPassword
+            ':password' => $hashedPassword,
+            'role' => $role,
         ]);
     }
 

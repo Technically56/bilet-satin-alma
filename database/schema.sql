@@ -16,7 +16,7 @@ CREATE TABLE User(
     company_id UUID,
     balance INTEGER DEFAULT 800,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY(company_id) REFERENCES Bus_Company(id)
+    FOREIGN KEY(company_id) REFERENCES Bus_Company(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Trips(
@@ -29,7 +29,7 @@ CREATE TABLE Trips(
     price INTEGER NOT NULL,
     capacity INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (company_id) REFERENCES Bus_Company(id)
+    FOREIGN KEY (company_id) REFERENCES Bus_Company(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Tickets(
@@ -39,8 +39,8 @@ CREATE TABLE Tickets(
     status TEXT NOT NULL DEFAULT 'active' CHECK (status in ('active','canceled','expired')),
     total_price INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (trip_id) REFERENCES Trips(id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (trip_id) REFERENCES Trips(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Booked_Seats(
@@ -48,7 +48,7 @@ CREATE TABLE Booked_Seats(
     ticket_id UUID NOT NULL,
     seat_number INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ticket_id) REFERENCES Tickets(id)
+    FOREIGN KEY (ticket_id) REFERENCES Tickets(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Coupons(
@@ -59,13 +59,14 @@ CREATE TABLE Coupons(
     expire_date DATETIME NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     company_id UUID NOT NULL,
-    FOREIGN KEY (company_id) REFERENCES Bus_Company(id)
+    FOREIGN KEY (company_id) REFERENCES Bus_Company(id) ON DELETE CASCADE
 );
+
 CREATE TABLE User_Coupons(
     id UUID PRIMARY KEY,
     coupon_id UUID NOT NULL,
     user_id UUID NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES User(id),
-    FOREIGN KEY (coupon_id) REFERENCES Coupons(id)
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY (coupon_id) REFERENCES Coupons(id) ON DELETE CASCADE
 );

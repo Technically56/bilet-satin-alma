@@ -84,7 +84,7 @@
                     <div class="card-body p-4">
                         <form action="findtrip.php" method="POST" id="searchForm">
                             <div class="row g-3 d-flex justify-content-center">
-                                <!-- From City -->
+
                                 <div class="col-md-6 col-lg-3">
                                     <label for="fromCity" class="form-label fw-bold">
                                         <i class="bi bi-geo-alt-fill text-primary"></i> Nereden
@@ -100,7 +100,6 @@
                                     </select>
                                 </div>
 
-                                <!-- To City -->
                                 <div class="col-md-6 col-lg-3">
                                     <label for="toCity" class="form-label fw-bold">
                                         <i class="bi bi-geo-fill text-success"></i> Nereye
@@ -134,30 +133,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Hidden field for ISO 8601 datetime -->
-                            <input type="hidden" id="isoDateTime" name="datetime">
                         </form>
                     </div>
                 </div>
             </div>
             <div class="container mt-4" id="result"></div>
-            <script>
-                // Update hidden ISO 8601 datetime field when date or time changes
-                const dateInput = document.getElementById('travelDate');
-                const timeInput = document.getElementById('travelTime');
-                const isoInput = document.getElementById('isoDateTime');
-
-                function updateISO() {
-                    const date = dateInput.value;
-                    const time = timeInput.value || "00:00"; // default to midnight if no time
-                    if (date) {
-                        isoInput.value = `${date}T${time}`;
-                    }
-                }
-
-                dateInput.addEventListener('change', updateISO);
-                timeInput.addEventListener('change', updateISO);
-            </script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             <?php include('includes/footer.php'); ?>
         <?php endif; ?>

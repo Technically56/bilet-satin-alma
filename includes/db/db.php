@@ -1,5 +1,5 @@
 <?php
-$dsn = 'sqlite:/var/www/html/database/database.db'; 
+$dsn = 'sqlite:/var/www/html/database/database.db';
 $user = null;
 $pass = null;
 $options = [
@@ -10,6 +10,7 @@ $options = [
 
 try {
     $pdo = new PDO(dsn: $dsn, username: $user, password: $pass, options: $options);
+    $pdo->exec('PRAGMA foreign_keys = ON;');
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
     die("Database connection failed: " . $e->getMessage());

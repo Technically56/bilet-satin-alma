@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top shadow fs-5">
   <div class="container-fluid">
     <a href="/" class="navbar-brand mb-0 h1 fs-5">
-      <img class="d-inline-block align-center" src="static/images/logo.png" width="50" height="50" alt="Logo" />
+      <img class="d-inline-block align-center" src="/static/images/logo.png" width="50" height="50" alt="Logo" />
       Hızlı Bilet
     </a>
     <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
@@ -17,7 +17,6 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item active">
-          <!-- Add Dynamic Company Listing Here-->
           <a href="/companies.php" class="nav-link">Firmalar</a>
         </li>
         <li class="nav-item">
@@ -30,7 +29,7 @@
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              <img src="static/images/profilelogo.svg" alt="Profile" width="30" height="30" class="rounded-circle" />
+              <img src="/static/images/profilelogo.svg" alt="Profile" width="30" height="30" class="rounded-circle" />
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="profile.php">Profilim</a></li>

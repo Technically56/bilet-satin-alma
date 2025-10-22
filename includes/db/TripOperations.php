@@ -228,15 +228,13 @@ class TripManager
             ':capacity' => $capacity
         ]);
     }
-    public function deleteTrip(string $id): bool
+    public function deleteTrip(string $id, $company_id): bool
     {
         $this->pdo->beginTransaction();
         try {
-            $deleteticketsstatement = $this->pdo->prepare("DELETE FROM Tickets WHERE trip_id = :trip_id");
-            $ticketsResult = $deleteticketsstatement->execute([':trip_id' => $id]);
             $deletetripstatement = $this->pdo->prepare("DELETE FROM Trips WHERE id = :id AND company_id = :company_id");
-            $tripResult = $deletetripstatement->execute([':id' => $id]);
-            if ($ticketsResult && $tripResult) {
+            $tripResult = $deletetripstatement->execute([':id' => $id, ':company_id' => $company_id]);
+            if ($tripResult) {
                 $this->pdo->commit();
                 return true;
             } else {

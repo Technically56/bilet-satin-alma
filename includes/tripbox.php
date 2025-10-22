@@ -79,22 +79,6 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
                                 </div>
                             <?php } ?>
                         </div>
-
-                        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4 mb-4">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success" style="width: 30px; height: 30px;"></span>
-                                <span>Available</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary" style="width: 30px; height: 30px;"></span>
-                                <span>Selected</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger" style="width: 30px; height: 30px;"></span>
-                                <span>Booked</span>
-                            </div>
-                        </div>
-
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-lg">
                                 Rezervasyon Yap
@@ -128,4 +112,5 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
     <?php
     return ob_get_clean();
 }
+
 ?>
