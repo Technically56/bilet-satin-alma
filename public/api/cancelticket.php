@@ -5,15 +5,19 @@ require_once("../includes/db/db.php");
 require_once("../includes/db/TicketOperations.php");
 require_once("../includes/db/UserOperations.php");
 require_once("../includes/idatlas/idatlas.php");
+require_once("../includes/db/TripOperations.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $ticketManager = new TicketManager($pdo);
+$tripManager = new TripManager($pdo);
 $userManager = new UserManager($pdo);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["ticket"]) && $_POST["csrf_token"]) {
         $ticket_id = getFromAtlas($_POST["ticket"]);
+        $ticket = $ticketManager->getTicketById($ticket_id);
         $user = $userManager->findById($_SESSION["user_id"]);
+        $trip = $tripManager->getTripById($ticket['trip_id']);
         if ($user && $ticket_id) {
             $ticket = $ticketManager->getTicketById($ticket_id);
             $departureTime = DateTime::createFromFormat("Y-m-d H:i:s", $trip['departure_time']);
