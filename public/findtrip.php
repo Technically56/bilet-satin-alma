@@ -28,7 +28,6 @@
         require_once 'includes/tripbox.php';
 
         $companyManager = new CompanyManager($pdo);
-        ;
         $tripManager = new TripManager($pdo);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

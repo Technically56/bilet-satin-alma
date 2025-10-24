@@ -1,14 +1,11 @@
-# Use official PHP 8.4 + Apache image
+# Use official PHP 8.2 + Apache image
 FROM php:8.2-apache
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Update package lists
-RUN apt-get update
-
-# Install system dependencies
-RUN apt-get install -y --no-install-recommends \
+# Update package lists and install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -16,22 +13,17 @@ RUN apt-get install -y --no-install-recommends \
     libonig-dev \
     libsqlite3-dev \
     unzip \
-    git
+    git && \
+    rm -rf /var/lib/apt/lists/*
 
 # Configure and install GD extension
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
 
 # Install other PHP extensions
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pdo
-RUN docker-php-ext-install pdo_sqlite
+RUN docker-php-ext-install mbstring zip pdo pdo_sqlite
 
-# Clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Create session directory early (before copying files)
+# Create session directory early
 RUN mkdir -p /var/lib/php/sessions \
     && chown -R www-data:www-data /var/lib/php/sessions \
     && chmod -R 700 /var/lib/php/sessions
@@ -39,13 +31,17 @@ RUN mkdir -p /var/lib/php/sessions \
 # Install Composer from official image
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Set working directory
-WORKDIR /var/www/html
+# ------------------------------
+# 📦 Application setup
+# ------------------------------
 
-# Copy composer files first for better layer caching
-COPY composer.json composer.lock ./
+# Set working directory for the backend (non-public) files
+WORKDIR /var/www/
 
-# Install PHP dependencies
+# Copy composer files for dependency caching
+COPY composer.json composer.lock /var/www/
+
+# Install dependencies
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -53,13 +49,18 @@ RUN composer install \
     --optimize-autoloader \
     --no-scripts
 
-# Dump optimized autoloader
 RUN composer dump-autoload --optimize
 
-# Copy the rest of the project files
-COPY . .
+# Copy the rest of the project EXCEPT public directory
+COPY . /var/www/
+RUN rm -rf /var/www/public
 
-# Create custom PHP configuration directly
+# Copy only the public directory into Apache’s web root
+COPY public/ /var/www/html/
+
+# ------------------------------
+# ⚙️ PHP configuration
+# ------------------------------
 RUN echo "display_errors = On" > /usr/local/etc/php/conf.d/custom.ini && \
     echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "log_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
@@ -80,33 +81,28 @@ RUN echo "display_errors = On" > /usr/local/etc/php/conf.d/custom.ini && \
     echo "session.gc_maxlifetime = 1440" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "session.cookie_lifetime = 0" >> /usr/local/etc/php/conf.d/custom.ini
 
-# Run post-install scripts if any
+# Run post-install composer scripts if defined
 RUN composer run-script --no-dev post-install-cmd 2>/dev/null || true
 
-# Set Apache DocumentRoot to public/
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/default-ssl.conf 2>/dev/null || true
+# ------------------------------
+# 🌐 Apache configuration
+# ------------------------------
+# Ensure Apache DocumentRoot points to /var/www/html
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html|' /etc/apache2/sites-available/000-default.conf
 
-# Configure Apache to allow .htaccess overrides
-RUN echo '<Directory /var/www/html/public>\n\
+# Allow .htaccess overrides in the public directory
+RUN echo '<Directory /var/www/html>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\
     Require all granted\n\
 </Directory>' >> /etc/apache2/sites-available/000-default.conf
 
-# Set correct permissions for Apache
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
-
-# Create SQLite database directory if it doesn't exist
-RUN mkdir -p /var/www/html/database \
-    && chown -R www-data:www-data /var/www/html/database \
-    && chmod -R 775 /var/www/html/database
-
-# Create a writable directory for any temporary files
-RUN mkdir -p /var/www/html/storage /var/www/html/tmp \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/tmp \
-    && chmod -R 775 /var/www/html/storage /var/www/html/tmp
+# ------------------------------
+# 🔒 Permissions & storage
+# ------------------------------
+RUN mkdir -p /var/www/database /var/www/storage /var/www/tmp && \
+    chown -R www-data:www-data /var/www && \
+    chmod -R 775 /var/www
 
 # Expose port 80
 EXPOSE 80
