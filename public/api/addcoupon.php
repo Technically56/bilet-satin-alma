@@ -1,6 +1,5 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 require_once('../includes/db/UserOperations.php');
 require_once('../includes/db/TicketOperations.php');
 require_once('../includes/db/db.php');
@@ -15,8 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['couponCode']) && isset($_POST['csrf_token']) && ($_SESSION['csrf_token'] === $_POST['csrf_token'])) {
         $coupon = $paymentManager->getCouponByCode($_POST['couponCode']);
         $user = $userManager->findById($_SESSION['user_id']);
-        print_r($user);
-        print_r($coupon);
         if ($user !== null) {
             if ($coupon !== null) {
                 $pdo->beginTransaction();
@@ -31,11 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "<script>setTimeout(() => location.href = '/profile.php', 1000)</script>";
                 }
             }
-            echo "<h1>hello</h1>";
         }
     }
-    echo "<h1>hello</h1>";
+
 }
-echo "<h1>hello</h1>";
+
 
 ?>
