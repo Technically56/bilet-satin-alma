@@ -1,5 +1,5 @@
 <?php
-$dsn = 'sqlite:/var/www/html/database/database.db';
+$dsn = 'sqlite:/var/www/html/public/database/database.db';
 $user = null;
 $pass = null;
 $options = [
