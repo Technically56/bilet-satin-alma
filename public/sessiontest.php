@@ -15,7 +15,8 @@ if (!isset($_SESSION['test_counter'])) {
 }
 $_SESSION['test_counter']++;
 $_SESSION['last_access'] = date('Y-m-d H:i:s');
-
+$_SESSION['test'] = 'hello';
+echo $_SESSION['test'];
 // Display session info
 echo "<b>Session ID:</b> " . session_id() . "<br>";
 echo "<b>Session Counter:</b> " . $_SESSION['test_counter'] . "<br>";
