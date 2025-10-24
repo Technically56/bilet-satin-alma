@@ -1,10 +1,3 @@
-<?php session_start([
-  'cookie_path' => '/',
-  'cookie_lifetime' => 3600,
-  'cookie_secure' => false,
-  'cookie_httponly' => true,
-  'cookie_samesite' => 'lax',
-]); ?>
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top shadow fs-5">
   <div class="container-fluid">
     <a href="/" class="navbar-brand mb-0 h1 fs-5">

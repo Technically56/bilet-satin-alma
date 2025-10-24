@@ -13,11 +13,6 @@ require_once 'includes/db/TripOperations.php';
 require_once 'includes/db/PaymentOperations.php';
 
 
-
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 $userManager = new UserManager($pdo);
 $ticketManager = new TicketManager($pdo);
 $tripManager = new TripManager($pdo);

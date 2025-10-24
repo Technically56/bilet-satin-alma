@@ -19,8 +19,6 @@ $ticketManager = new TicketManager($pdo);
 $paymentManager = new PaymentManager($pdo, $userManager, $ticketManager, $tripManager);
 $companyManager = new CompanyManager($pdo);
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
@@ -39,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($seats)) {
             die("Lütfen en az bir koltuk seçin.");
         }
-        echo "hello";
+
         $result = $paymentManager->buyTicket($trip_id, $seats, $coupon_id);
-        echo "here";
+
         echo $_SESSION['debug'];
         if ($result === "success") {
             $_SESSION['paymentredirect'] = true;
