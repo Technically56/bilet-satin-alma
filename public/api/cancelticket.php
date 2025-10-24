@@ -1,10 +1,12 @@
 <?php
+
 session_start();
 require_once("../includes/db/db.php");
 require_once("../includes/db/TicketOperations.php");
 require_once("../includes/db/UserOperations.php");
 require_once("../includes/idatlas/idatlas.php");
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $ticketManager = new TicketManager($pdo);
 $userManager = new UserManager($pdo);
 
