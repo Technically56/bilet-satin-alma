@@ -15,7 +15,7 @@ require_once("includes/db/db.php");
 require_once("includes/db/TripOperations.php");
 require_once("includes/tickettemplate.php");
 require_once("includes/idatlas/idatlas.php");
-require __DIR__ . '../vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use Mpdf\Mpdf;
 
