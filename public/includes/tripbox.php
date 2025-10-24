@@ -12,7 +12,8 @@ function displayTripBox(string $company_name, string $companyLogoPath, string $d
                     class="btn btn-primary w-100 py-4 d-flex align-items-center justify-content-between gap-3 px-4 trip-toggle"
                     type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo $uniqueId; ?>">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="<?php echo htmlspecialchars($companyLogoPath); ?>" alt="Bus" class="rounded" onerror="this.onerror=null; this.src='/static/images/companylogo.png';
+                        <img src="<?php echo htmlspecialchars($companyLogoPath); ?>" alt="Bus" class="rounded"
+                            onerror="this.onerror=null; this.src='/static/images/companylogo.png';"
                             style=" width: 80px; height: 80px;">
                         <div class="text-start">
                             <div class="fw-bold fs-4">
