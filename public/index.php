@@ -1,21 +1,23 @@
+<?php session_start(options: [
+    'cookie_path' => '/',
+    'cookie_lifetime' => 3600,
+    'cookie_secure' => false,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'lax',
+]);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Ana Sayfa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="" rel="stylesheet">
 </head>
 
 <body>
-    <?php session_start(options: [
-        'cookie_path' => '/',
-        'cookie_lifetime' => 3600,
-        'cookie_secure' => false,
-        'cookie_httponly' => true,
-        'cookie_samesite' => 'lax',
-    ]);
-    ?>
+
     <?php include 'includes/navbar.php'; ?>
     <div class="bg-primary text-white position-relative"
         style="background: linear-gradient(rgba(13, 110, 253, 0.5), rgba(13, 110, 253, 0.5)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1920') center/cover; min-height: 100vh;">
