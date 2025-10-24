@@ -1,6 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+session_start(options: [
+    'cookie_path' => '/',
+    'cookie_lifetime' => 3600,
+    'cookie_secure' => false,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'lax',
+]);
 require_once("includes/db/TicketOperations.php");
 require_once("includes/db/CompanyOperations.php");
 require_once("includes/db/UserOperations.php");
@@ -13,13 +18,7 @@ require __DIR__ . '../vendor/autoload.php';
 use Mpdf\Mpdf;
 
 
-session_start(options: [
-    'cookie_path' => '/',
-    'cookie_lifetime' => 3600,
-    'cookie_secure' => false,
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'lax',
-]);
+
 $userManager = new UserManager($pdo);
 $tripManager = new TripManager($pdo);
 $companyManager = new CompanyManager($pdo);

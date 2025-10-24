@@ -1,3 +1,13 @@
+<?php
+session_start([
+    'cookie_path' => '/',
+    'cookie_lifetime' => 3600,
+    'cookie_secure' => false,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'lax',
+]);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,13 +21,7 @@
 </head>
 
 <body>
-    <?php session_start([
-        'cookie_path' => '/',
-        'cookie_lifetime' => 3600,
-        'cookie_secure' => false,
-        'cookie_httponly' => true,
-        'cookie_samesite' => 'lax',
-    ]);
+    <?php
 
     if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) { ?>
         <?php

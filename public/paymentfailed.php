@@ -1,3 +1,14 @@
+<?php
+session_start(options: [
+    'cookie_path' => '/',
+    'cookie_lifetime' => 3600,
+    'cookie_secure' => false,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'lax',
+]);
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,13 +20,7 @@
 </head>
 
 <body class="bg-light">
-    <?php session_start(options: [
-        'cookie_path' => '/',
-        'cookie_lifetime' => 3600,
-        'cookie_secure' => false,
-        'cookie_httponly' => true,
-        'cookie_samesite' => 'lax',
-    ]);
+    <?php
     if ($_SESSION['paymentredirect'] === true): ?>
         <?php include("includes/navbar.php"); ?>
         <div class="container my-5">

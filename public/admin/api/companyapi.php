@@ -1,18 +1,18 @@
 <?php
+session_start();
 require_once('../../includes/db/TripOperations.php');
 require_once('../../includes/idatlas/idatlas.php');
 require_once('../../includes/db/UserOperations.php');
 require_once('../../includes/db/TicketOperations.php');
 require_once('../../includes/db/PaymentOperations.php');
 require_once('../../includes/db/db.php');
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 $tripManager = new TripManager($pdo);
 $ticketManager = new TicketManager($pdo);
 $userManager = new UserManager($pdo);
 $paymentManager = new PaymentManager($pdo, $userManager, $ticketManager, $tripManager);
 
-print_r($_POST);
+
 if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'company') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $userManager->findById($_SESSION['user_id']);

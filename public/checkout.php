@@ -1,4 +1,11 @@
 <?php
+session_start([
+    'cookie_path' => '/',
+    'cookie_lifetime' => 3600,
+    'cookie_secure' => false,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'lax',
+]);
 require_once 'includes/db/db.php';
 require_once 'includes/db/UserOperations.php';
 require_once 'includes/db/TripOperations.php';
@@ -11,13 +18,7 @@ $tripManager = new TripManager($pdo);
 $ticketManager = new TicketManager($pdo);
 $paymentManager = new PaymentManager($pdo, $userManager, $ticketManager, $tripManager);
 $companyManager = new CompanyManager($pdo);
-session_start([
-    'cookie_path' => '/',
-    'cookie_lifetime' => 3600,
-    'cookie_secure' => false,
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'lax',
-]);
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

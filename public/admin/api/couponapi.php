@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('../../includes/db/TripOperations.php');
 require_once('../../includes/idatlas/idatlas.php');
 require_once('../../includes/db/UserOperations.php');

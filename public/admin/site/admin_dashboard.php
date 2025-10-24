@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -12,7 +15,7 @@
 <body class="bg-light">
     <?php include("../../includes/navbar.php"); ?>
     <?php
-    session_start();
+
     require_once("../../includes/couponbox.php");
     require_once('../../includes/db/db.php');
     require_once('../../includes/db/CompanyOperations.php');
