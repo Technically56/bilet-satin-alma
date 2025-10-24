@@ -4,26 +4,32 @@ FROM php:8.4-apache
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Install system dependencies and PHP extensions required by mPDF
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# Update package lists
+RUN apt-get update
+
+# Install system dependencies
+RUN apt-get install -y --no-install-recommends \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
+    libonig-dev \
+    libsqlite3-dev \
     unzip \
-    git && \
-    docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg && \
-    docker-php-ext-install -j$(nproc) \
-        gd \
-        mbstring \
-        zip \
-        pdo \
-        pdo_sqlite && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    git
+
+# Configure and install GD extension
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
+
+# Install other PHP extensions
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_sqlite
+
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer from official image
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
