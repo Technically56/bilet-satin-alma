@@ -6,7 +6,7 @@ session_start([
     'cookie_httponly' => true,
     'cookie_samesite' => 'lax',
 ]);
-require_once('includes/db.php');
+require_once('includes/db/db.php');
 echo "<h2>Session Test</h2>";
 
 // Set a test variable
