@@ -226,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
         endif;
     else:
+        echo "<script>setTimeout(() => location.href = '/needlogin.php', 1000)</script>";
     endif;
-    echo "<script>setTimeout(() => location.href = '/needlogin.php', 1000)</script>";
+
 endif; ?>
