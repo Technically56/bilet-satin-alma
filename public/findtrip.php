@@ -23,7 +23,7 @@ session_start([
 <body>
     <?php
 
-    if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) { ?>
+    if (true) { ?>
         <?php
 
         require_once 'includes/db/db.php';
