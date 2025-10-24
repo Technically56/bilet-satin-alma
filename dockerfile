@@ -5,16 +5,19 @@ FROM php:8.4-apache
 RUN a2enmod rewrite
 
 # Install system dependencies and PHP extensions
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
     libzip-dev \
     libxml2-dev \
     unzip \
+    pkg-config \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd mbstring bcmath zip xml pdo pdo_sqlite \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Set working directory to project root
 WORKDIR /var/www/html
