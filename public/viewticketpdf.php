@@ -6,6 +6,8 @@ session_start(options: [
     'cookie_httponly' => true,
     'cookie_samesite' => 'lax',
 ]);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once("includes/db/TicketOperations.php");
 require_once("includes/db/CompanyOperations.php");
 require_once("includes/db/UserOperations.php");
