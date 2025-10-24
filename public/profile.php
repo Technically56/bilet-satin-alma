@@ -81,7 +81,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === "user"):
                                         <small class="text-muted">Aktif Bilet</small>
                                     </div>
                                 </div>
-                                <a href="/addcoins.php" class="btn btn-outline-primary btn-sm w-100">
+                                <a href="/addbalance.php" class="btn btn-outline-primary btn-sm w-100">
                                     Bakiye Yükle
                                 </a>
                             </div>
