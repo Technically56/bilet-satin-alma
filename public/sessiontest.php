@@ -6,7 +6,7 @@ session_start([
     'cookie_httponly' => true,
     'cookie_samesite' => 'lax',
 ]);
-
+require_once('includes/db.php');
 echo "<h2>Session Test</h2>";
 
 // Set a test variable
@@ -20,7 +20,7 @@ $_SESSION['last_access'] = date('Y-m-d H:i:s');
 echo "<b>Session ID:</b> " . session_id() . "<br>";
 echo "<b>Session Counter:</b> " . $_SESSION['test_counter'] . "<br>";
 echo "<b>Last Access:</b> " . $_SESSION['last_access'] . "<br><br>";
-
+echo $pdo->query("SELECT * FROM User");
 echo "<b>All Session Data:</b><br>";
 echo "<pre>";
 print_r($_SESSION);
