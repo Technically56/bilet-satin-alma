@@ -53,12 +53,15 @@ RUN composer install \
     --optimize-autoloader \
     --no-scripts
 
+# Dump optimized autoloader
+RUN composer dump-autoload --optimize
+
 # Copy the rest of the project files
 COPY . .
 
 # Create custom PHP configuration directly
-RUN echo "display_errors = Off" > /usr/local/etc/php/conf.d/custom.ini && \
-    echo "display_startup_errors = Off" >> /usr/local/etc/php/conf.d/custom.ini && \
+RUN echo "display_errors = On" > /usr/local/etc/php/conf.d/custom.ini && \
+    echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "log_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "error_log = /var/log/apache2/php_errors.log" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/custom.ini && \
