@@ -5,7 +5,11 @@ Bu proje, PHP, SQLite, HTMX ve mPDF kullanan bir bilet rezervasyon sistemidir ve
 ## Yönetici Hesabı
 
 ```
+/admin/login.php dizini ile giriş yapılacaktır. Firma admini için aynı girişten /admin/company/dashboard.php dizinine girilecektir.
+
+
 E-posta: siteadmin@site.com
+Rol:admin
 Şifre: aliuyanik
 ```
 
@@ -14,7 +18,7 @@ E-posta: siteadmin@site.com
 ### 1. Projeyi klonlayın
 
 ```bash
-git clone https://github.com/yourusername/bilet-satin-alma.git
+git clone git@github.com:Technically56/bilet-satin-alma.git
 cd bilet-satin-alma
 ```
 
@@ -29,6 +33,7 @@ docker-compose up --build
 ### 3. Veritabanı
 
 * SQLite veritabanı konteyner içinde kullanılır. `pdo_sqlite` uzantısı Dockerfile içinde kuruludur.
+* Veritabanı modeli /database dizinindeki schema.sql dosyasında mevcuttur. 
 
 ## Notlar
 
