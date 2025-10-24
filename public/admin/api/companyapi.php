@@ -46,8 +46,6 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'company') {
                 $fullDepartureDate = DateTime::createFromFormat("Y-m-d H:i", $departureDate . " " . $departureTime);
                 $diffToNowFromDepart = $fullDepartureDate->getTimestamp() - $now->getTimestamp();
                 $diffToArrival = $fullArrivalDate->getTimestamp() - $fullDepartureDate->getTimestamp();
-                echo $diffToArrival;
-                echo $diffToNowFromDepart;
                 if (!$tripManager->isValidCity($from) || !$tripManager->isValidCity($to)) {
                     echo "<div class='alert alert-danger text-center py-2' role='alert'>Geçersiz Şehir İsmi!</div>";
                     exit;

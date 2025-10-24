@@ -59,13 +59,13 @@ RUN rm -rf /var/www/public
 COPY public/ /var/www/html/
 
 # ------------------------------
-# ⚙️ PHP configuration
+# ⚙️ PHP configuration (errors hidden)
 # ------------------------------
-RUN echo "display_errors = On" > /usr/local/etc/php/conf.d/custom.ini && \
-    echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
+RUN echo "display_errors = Off" > /usr/local/etc/php/conf.d/custom.ini && \
+    echo "display_startup_errors = Off" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "log_errors = On" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "error_log = /var/log/apache2/php_errors.log" >> /usr/local/etc/php/conf.d/custom.ini && \
-    echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/custom.ini && \
+    echo "error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/custom.ini && \
     echo "upload_max_filesize = 10M" >> /usr/local/etc/php/conf.d/custom.ini && \

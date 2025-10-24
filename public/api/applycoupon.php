@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../includes/db/db.php';
 require_once '../includes/db/PaymentOperations.php';
 require_once '../includes/idatlas/idatlas.php';
@@ -7,7 +8,7 @@ require_once('../includes/db/TripOperations.php');
 require_once('../includes/db/TicketOperations.php');
 require_once('../includes/db/CompanyOperations.php');
 
-session_start();
+
 $userManager = new UserManager($pdo);
 $tripManager = new TripManager($pdo);
 $ticketManager = new TicketManager($pdo);

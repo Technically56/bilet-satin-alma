@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once("../includes/db/db.php");
 require_once("../includes/db/UserOperations.php");
 require_once("../includes/idatlas/idatlas.php");

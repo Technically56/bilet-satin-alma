@@ -66,7 +66,6 @@ function renderCouponBox($boxtitle, array $coupons, string $company_name): strin
         </div>
         </div>
 
-        <!-- Update Coupon Modal -->
         <div class="modal fade" id="updateCouponModal_<?php echo htmlspecialchars($couponId); ?>" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -138,7 +137,6 @@ function renderCouponBox($boxtitle, array $coupons, string $company_name): strin
             </div>
         </div>
 
-        <!-- Remove Coupon Modal -->
         <div class="modal fade" id="removeCouponModal_<?php echo htmlspecialchars($couponId); ?>" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">

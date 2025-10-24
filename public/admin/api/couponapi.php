@@ -69,9 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         }
         if ($_POST['operation'] === 'create') {
-            echo 'hello5';
+
             if (isset($_POST['csrf_token']) && isset($_POST['code']) && isset($_POST['discount']) && isset($_POST['date']) && isset($_POST['time']) && isset($_POST['usage'])) {
-                echo 'hello6';
                 if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
                     echo "<div class='alert alert-danger text-center py-2' role='alert'>Csrf Token Hatası!</div>";
                     exit;
@@ -99,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $discount = ((float) $discount) / 100.0;
                 $result = $paymentManager->createCoupon($code, $discount, $usage_limit, $fullExpiry->format("Y-m-d H:i:s"), $user['company_id']);
-                echo "result" . $result;
                 if ($result) {
                     echo "<div class='alert alert-success text-center py-2' role='alert'>Kupon Başarıyla Güncellendi</div>";
                     if ($_SESSION['user_role'] === 'company') {
@@ -119,14 +117,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     if ($_POST['operation'] === 'remove') {
-        echo 'hello8';
+
         if (isset($_POST['csrf_token']) && isset($_POST['couponId'])) {
             if ($_SESSION['csrf_token'] !== $_POST['csrf_token']) {
                 echo "<div class='alert alert-danger text-center py-2' role='alert'>Csrf Token Hatası!</div>";
                 exit;
             }
             $coupon = $paymentManager->getCouponById(getFromAtlas($_POST['couponId']));
-            print_r($coupon);
             $couponCompanyId = $coupon['company_id'] ?? NULL;
             $userCompanyId = $user['company_id'] ?? NULL;
             if ($userCompanyId === $couponCompanyId) {

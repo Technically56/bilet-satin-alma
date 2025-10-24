@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-apache-app
+    ports:
+      - "8080:80"                 # Access app via http://localhost:8080
+    volumes:
+      - apache-logs:/var/log/apache2      # Persistent logs
+      - php-sessions:/var/lib/php/sessions # Persistent PHP sessions
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+    restart: unless-stopped
+
+# Define named volumes for persistence
+volumes:
+  apache-logs:
+  php-sessions:
