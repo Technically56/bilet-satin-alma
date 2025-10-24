@@ -1,3 +1,13 @@
+<?php
+session_start([
+  'cookie_path' => '/',
+  'cookie_lifetime' => 3600,
+  'cookie_secure' => false,
+  'cookie_httponly' => true,
+  'cookie_samesite' => 'lax',
+]);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,13 +60,7 @@
     crossorigin="anonymous"></script>
 
   <?php
-  session_start([
-    'cookie_path' => '/',
-    'cookie_lifetime' => 3600,
-    'cookie_secure' => false,
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'lax',
-  ]);
+
   require_once("includes/db/db.php");
   require_once("includes/db/UserOperations.php");
   $userManager = new UserManager(pdo: $pdo);
