@@ -225,5 +225,5 @@ function renderCouponBox($boxtitle, array $coupons, string $company_name): strin
                             </div>
                         </div>
                     </div>
-                    <?php return ob_get_clean();
-} ?>
+                    <?php return ob_get_clean(); ?>
+                <?php } ?>

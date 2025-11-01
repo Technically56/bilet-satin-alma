@@ -162,7 +162,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'company'):
                 $couponCompany = $companyManager->findById($loggedInUser['company_id']);
                 $coupons = $paymentManager->getCouponsByCompany($couponCompany['id'] ?? NULL);
                 echo renderCouponBox("Firma Kuponları", $coupons, $couponCompany['name'] ?? 'Yok');
-                ?>?>
+                ?>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
                 <?php include("../../includes/footer.php"); ?>
