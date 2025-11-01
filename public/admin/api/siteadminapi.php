@@ -5,18 +5,17 @@ require_once('../../includes/db/CompanyOperations.php');
 require_once('../../includes/db/UserOperations.php');
 require_once('../../includes/idatlas/idatlas.php');
 
-// Check if user is admin
+
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     http_response_code(403);
     echo '<div class="alert alert-danger">Unauthorized access</div>';
     exit;
 }
 
-// Initialize managers
+
 $companyManager = new CompanyManager($pdo);
 $userManager = new UserManager($pdo);
 
-// Get request method and operation
 $method = $_SERVER['REQUEST_METHOD'];
 $operation = $_POST['operation'] ?? '';
 

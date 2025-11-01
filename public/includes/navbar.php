@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top shadow fs-5">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top shadow fs-5">
   <div class="container-fluid">
     <a href="/" class="navbar-brand mb-0 h1 fs-5">
       <img class="d-inline-block align-center" src="/static/images/logo.png" width="50" height="50" alt="Logo" />
