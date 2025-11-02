@@ -55,13 +55,6 @@ if ($method === 'POST') {
 
             $result = $companyManager->update($id, $name, $logo_path);
             if ($result) {
-                echo $maskedId;
-                echo '<br>';
-                echo $id;
-                echo '<br>';
-                echo $name;
-                echo '<br>';
-                echo $logo_path;
                 echo '<div class="alert alert-success">Şirket başarıyla güncellendi!</div>';
                 echo '<script>setTimeout(() => location.reload(), 1000)</script>';
                 exit;
