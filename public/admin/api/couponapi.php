@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
                 $couponId = getFromAtlas($_POST["couponId"]);
-                $coupon = $paymentManager->getCouponById($_POST['couponId']);
+                $coupon = $paymentManager->getCouponById(getFromAtlas($_POST['couponId']));
                 $code = $_POST["code"];
                 $discount = $_POST["discount"];
                 $date = $_POST["date"];
